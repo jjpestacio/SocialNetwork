@@ -4,8 +4,10 @@ I created a mock social network to practice ReactJS, Flux, and Redux. I decided 
 
 TO USE
 
-`npm install`
-`npm start`
+```
+npm install
+npm start
+```
 
 Server is running on localhost:3000
 
