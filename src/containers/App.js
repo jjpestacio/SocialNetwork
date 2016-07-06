@@ -1,33 +1,26 @@
-import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
-// import { FriendList, PeopleList, Wall } from '../components/index';
-import FriendListContainer from './friendListContainer'
-import PeopleListContainer from './peopleListContainer'
-import WallContainer from './wallContainer'
-import PostToWall from '../components/postToWall'
+// Component to connect to
+import Layout from '../components/Layout'
 
-export default class App extends Component {
-  render() {
-    return (
-      <div className="page"> 
+// Actions
+import { viewProfile } from '../actions/index'
 
-        <div className="navbar"></div>
-
-        <div className="content">
-          <div className="friends-list">
-            <FriendListContainer />
-          </div>
-
-          <div className="people-list">
-            <PeopleListContainer />
-          </div>
-
-          <div className="wall">
-            <WallContainer />
-            <PostToWall />
-          </div>
-        </div>
-      </div>
-    );
-  }
+const mapStateToProps = (state) => {
+	return {}
 }
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		viewProfile: (id) => {
+			dispatch(viewProfile(id))
+		}
+	}
+}
+
+const App = connect(
+	mapStateToProps,
+    mapDispatchToProps
+)(Layout)
+
+export default App

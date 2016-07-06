@@ -1,13 +1,13 @@
 import { connect } from 'react-redux'
 
 // Component to link to
-import FriendList from '../components/friends/friendList'
+import OtherPeople from '../components/people/otherPeople'
 
 // Constants
-import { FRIENDS } from '../constants/constants'
+import { NONFRIENDS } from '../constants/constants'
 
 // Actions
-import { viewProfile, removeFriend } from '../actions/index'
+import { viewProfile, addFriend } from '../actions/index'
 
 // Functions
 import { splitPeople } from '../functions/index'
@@ -15,7 +15,7 @@ import { splitPeople } from '../functions/index'
 const mapStateToProps = (state) => {
 	return {
 		currentId: state.currentId,
-		friends: splitPeople(state, FRIENDS)
+		otherPeople: splitPeople(state, NONFRIENDS)
 	}
 }
 
@@ -25,15 +25,15 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(viewProfile(id))
 		},
 
-		removeFriend: (currentId, id) => {
-			dispatch(removeFriend(currentId, id))
+		addFriend: (currentId, id) => {
+			dispatch(addFriend(currentId, id))
 		}
 	}
 }
 
-const friendListContainer = connect(
+const otherPeopleContainer = connect(
 	mapStateToProps,
     mapDispatchToProps
-)(FriendList)
+)(OtherPeople)
 
-export default friendListContainer
+export default otherPeopleContainer

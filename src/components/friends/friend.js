@@ -1,11 +1,19 @@
-import React from 'react'
+import React, { Component, PropTypes } from 'react'
+import { Link } from 'react-router'
 
-const Friend = ({viewProfile, onClick, name}) => (
+const Friend = ({id, name, viewProfile, removeFriend}) => (
 	<li>
-		{name}
-		<button onClick={onClick}>Remove Friend</button>
+		ID: {id} NAME: {name}
 		<button onClick={viewProfile}>View Profile</button>
-	</li>
+		<button onClick={removeFriend}>Remove Friend</button>
+	</li>		
 )
+
+Friend.propTypes = {
+	id: PropTypes.number.isRequired,
+	name: PropTypes.string.isRequired,
+	viewProfile: PropTypes.func.isRequired,
+	removeFriend: PropTypes.func.isRequired
+}
 
 export default Friend

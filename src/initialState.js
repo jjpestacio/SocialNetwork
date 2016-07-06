@@ -1,34 +1,51 @@
-const person = (id, name, friend, people, wall) => {
-	return {id, name, friend, people, wall};
-}
-
-const userWall = [
+let fakeWall1 = [
 	{
-		id: 0,
-		author: 'jj',
+		author: 'JJ',
+		text: 'hi'
+	},
+	{
+		author: 'mom',
 		text: 'hi'
 	}
 ]
 
-let fakeWall = [
+let fakeWall2 = [
 	{
-		id: 0,
-		author: 'sup',
+		author: 'dad',
+		text: 'sup'
+	},
+	{
+		author: 'USER',
 		text: 'hi'
 	}
-]
-
-export let people = [
-	person(0, 'jj', true, [], fakeWall),
-	person(1, 'jayana', true, [], []),
-	person(2, 'mom', false, [], []),
-	person(3, 'john', false, [], [])
 ]
 
 const initialState = {
-	profile: -1,
-	people,
-	wall: userWall
+	currentId: '0',
+	isFriend: true,
+	
+	ids: [0,1,2,3],
+
+	namesById: [
+		'USER',
+		'JJ',
+		'mom',
+		'dad'
+	],
+	
+	friendsById: [
+		[1,2,3],
+		[0,2],
+		[0,1],
+		[0]
+	],
+
+	wallsById: [
+		fakeWall1,
+		fakeWall2,
+		[],
+		[]
+	]
 }
 
 export default initialState

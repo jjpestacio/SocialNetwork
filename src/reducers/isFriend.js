@@ -2,12 +2,10 @@ import initialState from '../initialState'
 
 import { VIEW_PROFILE } from '../constants/ActionTypes'
 
-const viewProfile = (state=initialState.profile, action) => {
+const isFriendReducer = (state=initialState.isFriend, action) => {
 	switch(action.type) {
 		case VIEW_PROFILE: {
-			return {
-				profile: action.id,
-			}
+			return state;
 		}
 
 		default:
@@ -15,4 +13,4 @@ const viewProfile = (state=initialState.profile, action) => {
 	}
 }
 
-export default viewProfile
+export default isFriendReducer
