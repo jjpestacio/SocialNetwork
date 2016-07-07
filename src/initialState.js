@@ -20,23 +20,32 @@ let fakeWall2 = [
 	}
 ]
 
+let fakeWall3 = [
+	{
+		author: 'JJ',
+		text: 'Hi girlfriend c: .. I love you very much hehe'
+	}
+]
+
 const initialState = {
-	currentId: '0',
+	currentId: 0,
 	isFriend: true,
 	
-	ids: [0,1,2,3],
+	ids: [0,1,2,3,4],
 
 	namesById: [
 		'USER',
 		'JJ',
 		'mom',
-		'dad'
+		'dad',
+		'JANETHEBAE'
 	],
 	
 	friendsById: [
-		[1,2,3],
-		[0,2],
-		[0,1],
+		[0,1,3,4],
+		[0,1,2],
+		[1,2],
+		[0,3],
 		[0]
 	],
 
@@ -44,7 +53,8 @@ const initialState = {
 		fakeWall1,
 		fakeWall2,
 		[],
-		[]
+		[],
+		fakeWall3,
 	]
 }
 

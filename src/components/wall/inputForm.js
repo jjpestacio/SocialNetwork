@@ -1,17 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 
-// const InputForm = ({handleTextChange, handleSubmit}) => (
-// 	<form>
-// 		<input type="text" name="text" 
-// 			placeholder="Write something here..." onChange={handleTextChange} />
-// 		<button type="button" onClick={handleSubmit}>Post</button>
-// 	</form>
-// )
-
-
 class InputForm extends Component {
 	constructor(props) {
-		super(props);
+		super(props); // post()
 		this.handleTextChange = this.handleTextChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.state = {value: ''}

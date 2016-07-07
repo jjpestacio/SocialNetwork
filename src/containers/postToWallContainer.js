@@ -6,17 +6,17 @@ import PostToWall from '../components/wall/postToWall'
 // Actions
 import { submitPost, removePost } from '../actions/index'
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ( state ) => {
 	return {
 		currentId: state.currentId
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = ( dispatch ) => {
 	return {
-		submitPost: (currentId, post) => {
+		submitPost: ( currentId, post ) => {
 			dispatch(submitPost(currentId, post))
-		},
+		}
 	}
 }
 

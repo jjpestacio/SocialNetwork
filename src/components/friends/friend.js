@@ -1,11 +1,14 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 
-const Friend = ({id, name, viewProfile, removeFriend}) => (
+// Components
+import RemoveButton from '../buttons/remove'
+
+const Friend = ({ currentId, id, name, removeFriend, viewProfile }) => (
 	<li>
 		ID: {id} NAME: {name}
 		<button onClick={viewProfile}>View Profile</button>
-		<button onClick={removeFriend}>Remove Friend</button>
+		<RemoveButton currentId={currentId} remove={removeFriend} />
 	</li>		
 )
 
@@ -13,7 +16,7 @@ Friend.propTypes = {
 	id: PropTypes.number.isRequired,
 	name: PropTypes.string.isRequired,
 	viewProfile: PropTypes.func.isRequired,
-	removeFriend: PropTypes.func.isRequired
+	removeFriend: PropTypes.func
 }
 
 export default Friend

@@ -12,20 +12,20 @@ import { viewProfile, addFriend } from '../actions/index'
 // Functions
 import { splitPeople } from '../functions/index'
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ( state ) => {
 	return {
 		currentId: state.currentId,
 		otherPeople: splitPeople(state, NONFRIENDS)
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = ( dispatch ) => {
 	return {
-		viewProfile: (id) => {
+		viewProfile: ( id ) => {
 			dispatch(viewProfile(id))
 		},
 
-		addFriend: (currentId, id) => {
+		addFriend: ( currentId, id ) => {
 			dispatch(addFriend(currentId, id))
 		}
 	}

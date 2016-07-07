@@ -7,13 +7,17 @@ import Layout from '../components/Layout'
 import { viewProfile } from '../actions/index'
 
 const mapStateToProps = (state) => {
-	return {}
+	return {
+		isFriend: state.isFriend,
+		currentId: state.currentId,
+		friendsById: state.friendsById
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		viewProfile: (id) => {
-			dispatch(viewProfile(id))
+		viewProfile: (id, currentId, friendsById) => {
+			dispatch(viewProfile(id, currentId, friendsById))
 		}
 	}
 }

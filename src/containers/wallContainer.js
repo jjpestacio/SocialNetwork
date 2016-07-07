@@ -4,16 +4,16 @@ import Wall from '../components/wall/wall'
 // Actions
 import { removePost } from '../actions/index'
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ( state ) => {
 	return {
 		currentId: state.currentId,
 		posts: state.wallsById[state.currentId]
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = ( dispatch ) => {
 	return {
-		removePost: (currentId, id) => {
+		removePost: ( currentId, id ) => {
 			dispatch(removePost(currentId, id))
 		}
 	}

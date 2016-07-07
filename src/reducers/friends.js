@@ -1,13 +1,14 @@
 import initialState from '../initialState'
 
+// Constants
 import { ADD_FRIEND, REMOVE_FRIEND } from '../constants/ActionTypes'
 
-const friendsByIdReducer = (state=initialState.friendsById, action) => {
+const friendsByIdReducer = ( state=initialState.friendsById, action ) => {
 	switch(action.type) {
 		case ADD_FRIEND: {
 			const { currentId, id } = action;
 
-			return state.map((friendsArray, index) => {
+			return state.map(( friendsArray, index ) => {
 				if(index != currentId)
 					return friendsArray;
 
@@ -19,7 +20,7 @@ const friendsByIdReducer = (state=initialState.friendsById, action) => {
 		case REMOVE_FRIEND: {
 			const { currentId, id } = action;
 			
-			return state.map((friendsArray, index) => {
+			return state.map(( friendsArray, index ) => {
 				if (index != currentId)
 					return friendsArray;
 				else 

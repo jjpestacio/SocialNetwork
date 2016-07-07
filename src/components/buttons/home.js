@@ -3,7 +3,7 @@ import { browserHistory } from 'react-router'
 
 class HomeButton extends Component {
 	constructor(props) {
-		super(props);
+		super(props); // currentId
 		this.goHome = this.goHome.bind(this);
 	}
 

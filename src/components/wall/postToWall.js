@@ -5,7 +5,7 @@ import InputForm from './inputForm'
 
 class PostToWall extends Component {
 	constructor(props) {
-		super(props);
+		super(props); // currentId, submitPost()
 		this.post = this.post.bind(this);
 	}
 
@@ -15,6 +15,11 @@ class PostToWall extends Component {
 	}
 
 	render() {
+		const { isFriend } = this.props;
+
+		if (!isFriend)
+			return false
+
 		return (
 			<InputForm post={this.post}/>
 		)
@@ -22,7 +27,8 @@ class PostToWall extends Component {
 }
 
 PostToWall.propTypes = {
-	currentId: PropTypes.string.isRequired,
+	currentId: PropTypes.number.isRequired,
+	isFriend: PropTypes.bool.isRequired,
 	submitPost: PropTypes.func.isRequired
 }
 

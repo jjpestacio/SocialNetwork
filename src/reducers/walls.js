@@ -1,14 +1,14 @@
 import initialState from '../initialState'
 
-// Action types
+// Constants
 import { SUBMIT_POST, REMOVE_POST } from '../constants/ActionTypes'
 
-const wallsByIdReducer = (state=initialState.wallsById, action) => {
+const wallsByIdReducer = ( state=initialState.wallsById, action ) => {
 	switch(action.type) {
 		case SUBMIT_POST: {
 			const { currentId, post } = action;
 			
-			return state.map((wallArrays, index) => {
+			return state.map(( wallArrays, index ) => {
 				if (index != currentId)
 					return wallArrays;
 
@@ -20,7 +20,7 @@ const wallsByIdReducer = (state=initialState.wallsById, action) => {
 		case REMOVE_POST: {
 			const { currentId, id } = action; 
 
-			return state.map((wall, index) => {
+			return state.map(( wall, index ) => {
 				if (index != currentId)
 					return wall;
 
