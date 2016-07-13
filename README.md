@@ -4,12 +4,18 @@ I created a mock social network to practice ReactJS, Flux, and Redux. I decided 
 
 # TO USE
 
+* Since I switched to a MERN stack and my project is still in development, you must have MongoDB installed to create a mongo database. I included a script to initialize the database: scripts/init.mongo.sh. I also took out Webpack and used Gulp for now, because I still need to learn Webpack more in depth.
+
 ```
+// in SocialNetwork/
+
 npm install
-npm start
+./scripts/init.mongo.sh
+gulp bundle
+node server-hook.js
 ```
 
-Server is running on localhost:3000
+Server is now running on localhost:3000
 
 # LOG
 
@@ -35,6 +41,6 @@ Next I will be learning the MERN (MongoDB, Express, React, Node) stack and will 
 
 I learned the basics of the MERN stack and transferred my project to the stack. The state of the project is essentially where it was before except that data is now persisted and the application is served to the client from the server. The code had to be modified a good amount, although the logic stayed pretty much the same, so check the diffs. I created a script to initiate a mongodb (scripts/init.mongo.sh). The database a collection of objects that hold information for each profile. I also created an additional collection that holds all the registered ids and their associated names. I manipulate the database using axios promises. 
 
-I have not implemented server side routing yet. I intend to do that next. I also hope to create a simple log in system (not with authentication) so that the client can use different accounts that are registered with the system or create a new account. Later I hope to create interactivity between two users, such as instant messaging, using sockets.
+I have not implemented server side routing yet, so you can only access the application from localhost:3000/ .. I intend to do server side routing next. I also hope to create a simple log in system (not with authentication) so that the client can use different accounts that are registered with the system or create a new account. Later I hope to create interactivity between two users, such as instant messaging, using sockets.
 
 I promise I'll style it one day :D!
