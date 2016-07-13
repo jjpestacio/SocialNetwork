@@ -1,30 +1,29 @@
 import { FRIENDS, NONFRIENDS } from '../constants/constants'
 
+export const isFriend = ( friends, id ) => 
+    friends.indexOf(id) !== -1
+
+export const isUserPage = ( id, userId ) =>
+    id === userId
+
 export const splitPeople = ( state, type ) => {
-    const { currentId, ids, friendsById, namesById } = state;
-    const numPeople = ids.length;
+    const { friends, namesById } = state;
 
-    let otherPeople = [];
-    let friends = [];
-
-    for (let i = 0; i < numPeople; i++) {
-        if (friendsById[currentId].indexOf(ids[i]) == -1) { // id is not a friend
-            otherPeople = [
-                ...otherPeople,
-                { id: ids[i], name: namesById[ids[i]]}
-            ]
-
-        } else { // id is a friend
-            friends = [
-                ...friends,
-                { id: ids[i], name: namesById[ids[i]]}
-            ]
-        }
+    if (type === FRIENDS) {
+        return namesById.filter(person => 
+            friends.indexOf(person.id) !== -1
+        )
     }
 
-    if (type === FRIENDS)
-        return friends;
+    else if (type === NONFRIENDS) {
+        return namesById.filter(person =>
+            friends.indexOf(person.id) === -1
+        )
+    }
 
-    else // type === NONFRIENDS
-        return otherPeople;
+    else // type === ???
+        return namesById;
+
 }
+
+    

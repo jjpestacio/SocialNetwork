@@ -1,25 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-// React Router
-import { browserHistory, IndexRoute, Router, Route, Link } from 'react-router'
-
-// Redux
-import { createStore, combineReducers } from 'redux';
-import { Provider } from 'react-redux';
-import reducer from './reducers/index';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import configureStore from './configureStore'
+import { 
+	browserHistory, IndexRoute, Redirect,
+	Router, Route, Link 
+} from 'react-router'
 
 // Routes
-import App from './containers/App';
+import App from './containers/App'
 
-// Initial State
-import initialState from './initialState';
+// Actions
+import { fetchData, fetchNames, setUser } from './actions/index'
 
-let store = createStore(reducer, initialState, window.devToolsExtension && window.devToolsExtension());
+const store = configureStore;
+
+// Load initial data
+const initialLoad = () => {
+	store.dispatch(setUser(0, 'JJ'));
+	store.dispatch(fetchData(0));
+	store.dispatch(fetchNames());
+}
 
 ReactDOM.render(
 	<Provider store={store}>
 		<Router history={browserHistory}>
+			<Route path="/" component={App} onEnter={initialLoad}/>
 			<Route path="/:id" component={App} />
 		</Router>
 	</Provider>

@@ -5,34 +5,32 @@ import Post from './post'
 
 class Wall extends Component {
 	constructor(props) {
-		super(props); // currentId, isFriend, posts, removePost
+		super(props); // isUserPage, profileId, removePost(), wall
+		
+		// Functions
 		this.grabPosts = this.grabPosts.bind(this);
 		this.removePost = this.removePost.bind(this);
 	}
 
 	grabPosts() {
-		const { posts, isFriend, currentId } = this.props;
+		const { isUserPage, wall } = this.props;
 
-		if (!isFriend)
-			return ( <h4>You must add this person to see their wall.</h4> )
-
-		if (posts === undefined)
+		if (wall === undefined) // no posts
 			return
 
 		return (
-			posts.map((post, index) =>  
-				<Post key={index} currentId={currentId} 
-					id={index} author={post.author} text={post.text} 
-					removePost={() => this.removePost(index)}/>
+			wall.map(( post, index ) =>  
+				<Post key={index} isUserPage={isUserPage}
+					id={post.id} author={post.author} text={post.text} 
+					removePost={() => this.removePost(post.id)} />
 			)
 		)
 	}
 
 	removePost(id) {
-		const { currentId, removePost } = this.props;
+		const { profileId, removePost } = this.props;
 
-		// dispatch
-		removePost(currentId, id);
+		removePost(profileId, id);
 	}
 
 	render() {
@@ -46,9 +44,9 @@ class Wall extends Component {
 }
 
 Wall.propTypes = {
-	currentId: PropTypes.number.isRequired,
-	isFriend: PropTypes.bool.isRequired,
-	posts: PropTypes.array.isRequired,
+	isUserPage: PropTypes.bool.isRequired,
+	profileId: PropTypes.number.isRequired,
+	wall: PropTypes.array.isRequired,
 	removePost: PropTypes.func.isRequired
 }
 

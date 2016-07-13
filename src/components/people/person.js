@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 
-const Person = ({ id, name, viewProfile, addFriend }) => (
+const Person = ({ id, name, addFriend, viewProfile }) => (
 	<li>
 		ID: {id} NAME: {name}
 		<button onClick={viewProfile}>View Profile</button>

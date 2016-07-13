@@ -30,3 +30,11 @@ Next I will be adding unique functionality for the user. I will be changing how 
 I changed the components to render based on the user's perspective. The user is allowed to view the walls and friend lists of his/her friends. The user can view the profile of someone that is not on their friends list, however they cannot see that person's wall or friend list. 'People You May Know' is only displayed on the user's home page. The user can only remove his/her own friends and wall posts. 
 
 Next I will be learning the MERN (MongoDB, Express, React, Node) stack and will be trying to transfer my application to use it. I will be doing this so that my data could persist in a database. At a later time, I hope to store the user as an account the client himself creates (with a username and password).
+
+# 07/12/2016
+
+I learned the basics of the MERN stack and transferred my project to the stack. The state of the project is essentially where it was before except that data is now persisted and the application is served to the client from the server. The code had to be modified a good amount, although the logic stayed pretty much the same, so check the diffs. I created a script to initiate a mongodb (scripts/init.mongo.sh). The database a collection of objects that hold information for each profile. I also created an additional collection that holds all the registered ids and their associated names. I manipulate the database using axios promises. 
+
+I have not implemented server side routing yet. I intend to do that next. I also hope to create a simple log in system (not with authentication) so that the client can use different accounts that are registered with the system or create a new account. Later I hope to create interactivity between two users, such as instant messaging, using sockets.
+
+I promise I'll style it one day :D!

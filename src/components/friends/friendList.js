@@ -6,40 +6,40 @@ import Friend from './friend'
 
 class FriendList extends Component {
 	constructor(props) {
-		super(props); // currentId, friends, isFriend, removeFriend()
-		this.removeFriend = this.removeFriend.bind(this);
+		super(props); // fetchData(), friends, isUserPage, profileId, removeFriend()
+
+		// Functions
 		this.grabFriends = this.grabFriends.bind(this);
+		this.removeFriend = this.removeFriend.bind(this);
 		this.viewProfile = this.viewProfile.bind(this);
 	}
 
 	grabFriends() {
-		const { currentId, friends, isFriend } = this.props;
-
-		if (!isFriend)
-			return ( <h4>You must add this person to see their friend list.</h4> )
+		const { friends, isUserPage } = this.props;
 
 		if (friends === undefined) // friends is empty
 			return false
-	
+
 		return (
-			friends.map(( friend, index ) =>  
-				<Friend key={index} currentId={currentId} 
-					id={friend.id} name={friend.name} 
+			friends.map( friend => 
+				<Friend key={friend.id}
+					id={friend.id} name={friend.name} isUserPage={isUserPage}
 					viewProfile={() => this.viewProfile(friend.id)} 
-					removeFriend={() => this.removeFriend(friend.id)}/>
+					removeFriend={() => this.removeFriend(friend.id)} />
 			)
-		)	
+		)
 	}
 
 	removeFriend(id) {
-		const { currentId, removeFriend } = this.props;
-
-		// dispatch
-		removeFriend(currentId, id);
+		const { profileId, removeFriend } = this.props;
+		removeFriend(profileId, id);
 	}
 
 	viewProfile(id) {
+		const { fetchData } = this.props;
+
 		browserHistory.push('/' + id);
+		fetchData(id);
 	}
 
 	render() {
@@ -53,11 +53,11 @@ class FriendList extends Component {
 }
 
 FriendList.propTypes = {
-	currentId: PropTypes.number.isRequired,
+	fetchData: PropTypes.func.isRequired,
 	friends: PropTypes.array.isRequired,
-	isFriend: PropTypes.bool.isRequired,
+	isUserPage: PropTypes.bool.isRequired,
+	profileId: PropTypes.number.isRequired,
 	removeFriend: PropTypes.func.isRequired,
-	viewProfile: PropTypes.func.isRequired
 }
 
 export default FriendList

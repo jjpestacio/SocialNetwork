@@ -1,15 +1,14 @@
 import React, { Component, PropTypes } from 'react'
 import { browserHistory } from 'react-router' 
 
-// Constants
-import { USER_ID } from '../../constants/constants'
-
 // Components
 import Person from './person'
 
 class OtherPeople extends Component {
 	constructor(props) {
-		super(props); // currentId, otherPeople, addFriend()
+		super(props); // addFriend(), fetchData(), otherPeople, profileId
+
+		// Functions
 		this.addFriend = this.addFriend.bind(this);
 		this.grabOtherPeople = this.grabOtherPeople.bind(this);
 		this.viewProfile = this.viewProfile.bind(this);
@@ -22,31 +21,30 @@ class OtherPeople extends Component {
 			return
 
 		return (
-			otherPeople.map(( person, index ) =>  
-				<Person key={index} id={person.id} name={person.name} 
+			otherPeople.map( person =>  
+				<Person key={person.id} 
+					id={person.id} name={person.name} 
 					viewProfile={() => this.viewProfile(person.id)} 
-					addFriend={() => this.addFriend(person.id)}/>
+					addFriend={() => this.addFriend(person.id)} />
 			)
 		)
 	}
 
 	addFriend(id) {
-		const { addFriend, currentId } = this.props;
-		addFriend(currentId, id);
+		const { addFriend, profileId } = this.props;
+		addFriend(profileId, id);
 	}
 
 	viewProfile(id) {
+		const { fetchData } = this.props;
+
 		browserHistory.push('/' + id);
+		fetchData(id);
 	}
 
 	render() {
-		const { currentId } = this.props;
-
-		if (currentId != 0)
-			return false;
-
 		return (
-			<div>
+			<div>	
 				<h2>People You May Know</h2>
 				{this.grabOtherPeople()}
 			</div>
@@ -55,10 +53,10 @@ class OtherPeople extends Component {
 }
 
 OtherPeople.propTypes = {
-	currentId: PropTypes.number.isRequired,
+	addFriend: PropTypes.func.isRequired,
+	fetchData: PropTypes.func.isRequired,
 	otherPeople: PropTypes.array.isRequired,
-	viewProfile: PropTypes.func.isRequired,
-	addFriend: PropTypes.func.isRequired
+	profileId: PropTypes.number.isRequired,
 }
 
 export default OtherPeople

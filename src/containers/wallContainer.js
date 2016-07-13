@@ -4,18 +4,23 @@ import Wall from '../components/wall/wall'
 // Actions
 import { removePost } from '../actions/index'
 
+// Function
+import { isFriend, isUserPage } from '../functions/index'
+
 const mapStateToProps = ( state ) => {
+	const { friends, id, userId, wall } = state;
+
 	return {
-		currentId: state.currentId,
-		posts: state.wallsById[state.currentId]
+		profileId: id,
+		isUserPage: isUserPage(id, userId),
+		wall	
 	}
 }
 
 const mapDispatchToProps = ( dispatch ) => {
 	return {
-		removePost: ( currentId, id ) => {
-			dispatch(removePost(currentId, id))
-		}
+		removePost: ( profileId, id ) =>
+			dispatch(removePost(profileId, id))
 	}
 }
 

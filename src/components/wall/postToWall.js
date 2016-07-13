@@ -5,31 +5,30 @@ import InputForm from './inputForm'
 
 class PostToWall extends Component {
 	constructor(props) {
-		super(props); // currentId, submitPost()
+		super(props); // nextFreeId, profileId, submitPost(), userName
+
+		// Functions
 		this.post = this.post.bind(this);
 	}
 
 	post(text) {
-		const { currentId, submitPost } = this.props;
-		submitPost(currentId, {author: 'USER', text});
+		const { userName, nextFreeId, profileId, submitPost } = this.props;
+
+		submitPost(profileId, { id: nextFreeId, author: userName, text });
 	}
 
 	render() {
-		const { isFriend } = this.props;
-
-		if (!isFriend)
-			return false
-
 		return (
-			<InputForm post={this.post}/>
+			<InputForm submitPost={this.post} />
 		)
 	}
 }
 
 PostToWall.propTypes = {
-	currentId: PropTypes.number.isRequired,
-	isFriend: PropTypes.bool.isRequired,
-	submitPost: PropTypes.func.isRequired
+	nextFreeId: PropTypes.number.isRequired,
+	profileId: PropTypes.number.isRequired,
+	submitPost: PropTypes.func.isRequired,
+	userName: PropTypes.string.isRequired
 }
 
 export default PostToWall

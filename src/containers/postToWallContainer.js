@@ -7,16 +7,19 @@ import PostToWall from '../components/wall/postToWall'
 import { submitPost, removePost } from '../actions/index'
 
 const mapStateToProps = ( state ) => {
+	const { id, wall, userName } = state;
+
 	return {
-		currentId: state.currentId
+		nextFreeId: wall.length,
+		profileId: id,
+		userName
 	}
 }
 
 const mapDispatchToProps = ( dispatch ) => {
 	return {
-		submitPost: ( currentId, post ) => {
-			dispatch(submitPost(currentId, post))
-		}
+		submitPost: ( profileId, post ) =>
+			dispatch(submitPost(profileId, post))
 	}
 }
 

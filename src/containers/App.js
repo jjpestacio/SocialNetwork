@@ -6,11 +6,17 @@ import Layout from '../components/Layout'
 // Actions
 import { viewProfile } from '../actions/index'
 
+// Functions
+import { isFriend, isUserPage } from '../functions/index'
+
 const mapStateToProps = (state) => {
+	const { id, userId, friends } = state;
+	
 	return {
-		isFriend: state.isFriend,
-		currentId: state.currentId,
-		friendsById: state.friendsById
+		profileId: id,
+		isFriend: isFriend(friends, userId),
+		isUserPage: isUserPage(id, userId),
+		friends: friends
 	}
 }
 

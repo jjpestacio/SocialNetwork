@@ -4,51 +4,39 @@ import { browserHistory } from 'react-router'
 // Components
 import AddFriendButtonContainer from '../containers/addFriendButtonContainer'
 import FriendListContainer from '../containers/friendListContainer'
-import HomeButton from './buttons/home'
+import HomeButtonContainer from '../containers/homeButtonContainer'
 import OtherPeopleContainer from '../containers/otherPeopleContainer'
 import PageNameContainer from '../containers/pageNameContainer'
 import PostToWallContainer from '../containers/postToWallContainer'
 import WallContainer from '../containers/wallContainer'
 
-import { USER_ID } from '../constants/constants'
-
 class Layout extends Component {
 	constructor(props) {
-		super(props); // friendsById, isFriend, viewProfile()
+		super(props);
 	}
-
-	componentDidUpdate() {
-		const { friendsById, viewProfile } = this.props;
-		const id = parseInt(this.props.params.id);
-
-		// dispatch
-		viewProfile(id, USER_ID, friendsById); // currentId always is USER=0 for now
-	}
-
-	// shouldComponentUpdate() {
-	// }
 
 	render() {
-		const { isFriend } = this.props;
+		const { isFriend, isUserPage } = this.props;
 
 	    return (
-	      <div> 
-	      	<PageNameContainer />
-	      	<HomeButton /><br/>
-	      	<AddFriendButtonContainer isFriend={isFriend} />
-	        <FriendListContainer isFriend={isFriend} />
-	        <WallContainer isFriend={isFriend} /><br/>
-	        <PostToWallContainer isFriend={isFriend} />
-	        <OtherPeopleContainer isFriend={isFriend} />
-	      </div>
+	    	<div>
+	    		{ !isUserPage ? <HomeButtonContainer /> : null }
+	    		<PageNameContainer />
+	    		{ !isFriend ? <AddFriendButtonContainer /> : null}
+	    		{ isFriend ? <FriendListContainer />
+	    			: <h4>You must add this person to see their friend list</h4> }
+	    		{ isFriend ? <WallContainer />
+	    			: <h4>You must add this person to see their wall</h4> }
+	    		{ isFriend ? <PostToWallContainer /> : null }
+	    		{ isUserPage ? <OtherPeopleContainer /> : null }
+	    	</div>
 	    )
 	}
 }
 
 Layout.propTypes = {
-	friendsById: PropTypes.array.isRequired,
 	isFriend: PropTypes.bool.isRequired,
-	viewProfile: PropTypes.func.isRequired
+	isUserPage: PropTypes.bool.isRequired
 }
 
 export default Layout

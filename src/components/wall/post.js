@@ -1,19 +1,20 @@
 import React, { Component, PropTypes } from 'react'
 
-// Components
-import RemoveButton from '../buttons/remove'
-
-const Post = ({ currentId, id, author, text, removePost }) => (
+const Post = ({ id, author, text, isUserPage, removePost }) => (
 	<li>
 		ID: {id} AUTHOR: {author} TEXT: {text}
-		<RemoveButton currentId={currentId} remove={removePost} />
+		
+		{ isUserPage ? 
+			<button onClick={removePost}>Delete</button>
+		: null }
+
 	</li>
 )
 
 Post.propTypes = {
 	author: PropTypes.string.isRequired,
-	currentId: PropTypes.number.isRequired,
 	id: PropTypes.number.isRequired,
+	isUserPage: PropTypes.bool.isRequired,
 	removePost: PropTypes.func.isRequired,
 	text: PropTypes.string.isRequired
 }

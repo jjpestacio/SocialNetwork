@@ -7,27 +7,28 @@ import FriendList from '../components/friends/friendList'
 import { FRIENDS } from '../constants/constants'
 
 // Actions
-import { viewProfile, removeFriend } from '../actions/index'
+import { fetchData, viewProfile, removeFriend } from '../actions/index'
 
 // Functions
-import { splitPeople } from '../functions/index'
+import { isUserPage, splitPeople } from '../functions/index'
 
 const mapStateToProps = ( state ) => {
+	const { userId, id, friends } = state;
+
 	return {
-		currentId: state.currentId,
-		friends: splitPeople(state, FRIENDS)
+		profileId: id,
+		friends: splitPeople(state, FRIENDS),
+		isUserPage: isUserPage(id, userId)
 	}
 }
 
 const mapDispatchToProps = ( dispatch ) => {
 	return {
-		viewProfile: ( id ) => {
-			dispatch(viewProfile(id))
-		},
+		removeFriend: ( profileId, id ) =>
+			dispatch(removeFriend(profileId, id)),
 
-		removeFriend: ( currentId, id ) => {
-			dispatch(removeFriend(currentId, id))
-		}
+		fetchData: (id) => 
+			dispatch(fetchData(id))
 	}
 }
 

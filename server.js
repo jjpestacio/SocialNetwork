@@ -1,15 +1,112 @@
-var webpack = require('webpack');
-var WebpackDevServer = require('webpack-dev-server');
-var config = require('./webpack.config');
+import express from 'express'
+import bodyParser from 'body-parser'
+import { MongoClient } from 'mongodb'
+import React from 'react'
+import ReactDOMServer, { renderToString } from 'react-dom/server'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 
-new WebpackDevServer(webpack(config), {
-  publicPath: config.output.publicPath,
-  hot: true,
-  historyApiFallback: true
-}).listen(3000, 'localhost', function (err, result) {
-  if (err) {
-    return console.log(err);
-  }
+// Constants
+import { ADD_FRIEND, REMOVE_FRIEND, REMOVE_POST, SUBMIT_POST } from './src/constants/ActionTypes'
 
-  console.log('Listening at http://localhost:3000/');
-});
+const app = express();
+const PORT = process.env.PORT || 3000;
+var db;
+
+// Middleware
+app.use(express.static('static'));
+app.use(bodyParser.json());
+//app.use(handleRender);
+
+// Get specific profile info
+app.get('/api/users/:id', ( req, res ) => {
+	const profileId = parseInt(req.params.id);
+	db.collection("profiles")
+		.findOne({id: profileId}, ( err, profile ) => {
+			res.json(profile);
+		});
+})
+
+// Modify a specific profile
+app.post('/api/users/:id', ( req, res ) => {
+	const profileId = parseInt(req.params.id);
+	const { id, type } = req.body;
+
+	switch (type) {
+		case ADD_FRIEND: {
+			db.collection("profiles")
+				.update(
+					{ id: profileId }, 
+					{ $push: { friends: id }}
+				)
+
+			// For now, the person you add adds you back
+			db.collection("profiles")
+				.update(
+					{ id: id }, 
+					{ $push: { friends: profileId }}
+				)
+
+			break;
+		}
+
+		case REMOVE_FRIEND: {
+			db.collection("profiles")
+				.update(
+					{ id: profileId }, 
+					{ $pull: { friends: id }}
+				)
+
+			// For now, the person you remove also removes you
+			db.collection("profiles")
+				.update(
+					{ id: id }, 
+					{ $pull: { friends: profileId }}
+				)
+			break;
+		}
+
+		case REMOVE_POST: {
+			db.collection("profiles")
+				.update(
+					{ id: profileId },
+					{ $pull: { wall: { id: id}}}
+				)
+			break;
+		}
+
+		case SUBMIT_POST: {
+			const { author, text } = req.body;
+
+			db.collection("profiles")
+				.update(
+					{ id: profileId },
+					{ $push: { wall: {
+						id,
+						author,
+						text
+					}}}
+				)
+			break;
+		}
+	}
+
+	res.end();
+})
+
+// Get all names with id
+app.get('/api/namesById', ( req, res ) => {
+	db.collection("namesById")
+		.find({}).toArray(( err, namesById ) => {
+			res.json(namesById);
+		});
+})
+
+// Connect to server and connect to database
+MongoClient.connect('mongodb://localhost/users', ( err, dbConnection ) => {
+	db = dbConnection;
+
+	const server = app.listen(PORT, () => {
+		console.log("Started server at port", PORT);
+	});
+})

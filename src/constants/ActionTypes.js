@@ -1,3 +1,9 @@
+// DATA RELATED
+export const FETCH_DATA = 'FETCH_DATA'
+export const FETCH_NAMES = 'FETCH_NAMES'
+export const SET_USER = 'SET_USER'
+
+// ACTION RELATED
 export const ADD_FRIEND = 'ADD_FRIEND'
 export const REMOVE_FRIEND = 'REMOVE_FRIEND'
 export const REMOVE_POST = 'REMOVE_POST'

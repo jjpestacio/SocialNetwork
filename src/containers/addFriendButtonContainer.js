@@ -7,15 +7,18 @@ import AddFriendButton from '../components/buttons/addFriend'
 import { addFriend } from '../actions/index'
 
 const mapStateToProps = ( state ) => {
+	const { id, userId } = state;
+
 	return {
-		currentId: state.currentId
+		id,
+		userId
 	}
 }
 
 const mapDispatchToProps = ( dispatch ) => {
 	return {
-		addFriend: ( currentId, id ) => {
-			dispatch(addFriend(currentId, id))
+		addFriend: ( profileId, id ) => {
+			dispatch(addFriend(profileId, id))
 		}
 	}
 }
