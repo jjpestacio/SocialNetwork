@@ -8,6 +8,7 @@ import {
 } from 'react-router'
 
 // Routes
+import Login from './containers/loginContainer'
 import App from './containers/App'
 
 // Actions
@@ -17,15 +18,13 @@ const store = configureStore;
 
 // Load initial data
 const initialLoad = () => {
-	store.dispatch(setUser(0, 'JJ'));
-	store.dispatch(fetchData(0));
 	store.dispatch(fetchNames());
 }
 
 ReactDOM.render(
 	<Provider store={store}>
 		<Router history={browserHistory}>
-			<Route path="/" component={App} onEnter={initialLoad}/>
+			<Route path="/" component={Login} onEnter={initialLoad}/>
 			<Route path="/:id" component={App} />
 		</Router>
 	</Provider>

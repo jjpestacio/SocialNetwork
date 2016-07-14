@@ -36,7 +36,7 @@ class Wall extends Component {
 	render() {
 		return (
 			<div>
-				<h2>Wall</h2>
+				<h3>Wall</h3>
 				{this.grabPosts()}
 			</div>
 		)

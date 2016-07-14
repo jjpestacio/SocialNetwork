@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 
 const Post = ({ id, author, text, isUserPage, removePost }) => (
 	<li>
-		ID: {id} AUTHOR: {author} TEXT: {text}
+		AUTHOR: {author} TEXT: {text}
 		
 		{ isUserPage ? 
 			<button onClick={removePost}>Delete</button>

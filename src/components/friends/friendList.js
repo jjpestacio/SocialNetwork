@@ -15,13 +15,15 @@ class FriendList extends Component {
 	}
 
 	grabFriends() {
-		const { friends, isUserPage } = this.props;
+		const { friends, isUserPage, profileId } = this.props;
 
-		if (friends === undefined) // friends is empty
-			return false
+		// friends includes themself for easier logic
+		const friendsWithoutSelf = friends.filter( friend => 
+			friend.id != profileId
+		)
 
 		return (
-			friends.map( friend => 
+			friendsWithoutSelf.map( friend => 
 				<Friend key={friend.id}
 					id={friend.id} name={friend.name} isUserPage={isUserPage}
 					viewProfile={() => this.viewProfile(friend.id)} 
@@ -45,7 +47,7 @@ class FriendList extends Component {
 	render() {
 		return (
 			<div>
-				<h2>FriendList</h2>
+				<h3>FriendList</h3>
 				{this.grabFriends()}
 			</div>
 		)

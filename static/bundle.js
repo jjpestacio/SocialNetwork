@@ -26934,11 +26934,13 @@ module.exports = warning;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.submitPost = exports.setUser = exports.removePost = exports.removeFriend = exports.fetchNames = exports.fetchData = exports.addFriend = undefined;
+exports.submitPost = exports.setUser = exports.removePost = exports.removeFriend = exports.fetchNames = exports.fetchData = exports.createAccount = exports.addFriend = undefined;
 
 var _axios = require('axios');
 
 var _axios2 = _interopRequireDefault(_axios);
+
+var _reactRouter = require('react-router');
 
 var _ActionTypes = require('../constants/ActionTypes');
 
@@ -26952,6 +26954,22 @@ var addFriend = exports.addFriend = function addFriend(profileId, idToAdd) {
 		}).then(function (response) {
 			dispatch(fetchData(profileId));
 		});
+	};
+};
+
+var createAccount = exports.createAccount = function createAccount(userId, username) {
+	return function (dispatch) {
+		_axios2.default.post('/api/users/' + userId, {
+			type: _ActionTypes.CREATE_ACCOUNT,
+			id: userId,
+			name: username
+		});
+
+		// Go to newly created account's homepage
+		dispatch(setUser(userId, username));
+		dispatch(fetchNames());
+		dispatch(fetchData(userId));
+		_reactRouter.browserHistory.push('/' + userId);
 	};
 };
 
@@ -27008,7 +27026,7 @@ var setUser = exports.setUser = function setUser(id, name) {
 	return {
 		type: _ActionTypes.SET_USER,
 		userId: id,
-		userName: name
+		username: name
 	};
 };
 
@@ -27025,7 +27043,7 @@ var submitPost = exports.submitPost = function submitPost(profileId, post) {
 	};
 };
 
-},{"../constants/ActionTypes":275,"axios":1}],262:[function(require,module,exports){
+},{"../constants/ActionTypes":278,"axios":1,"react-router":94}],262:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27040,29 +27058,41 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require('react-router');
 
-var _addFriendButtonContainer = require('../containers/addFriendButtonContainer');
+var _addFriend = require('./buttons/addFriend');
 
-var _addFriendButtonContainer2 = _interopRequireDefault(_addFriendButtonContainer);
+var _addFriend2 = _interopRequireDefault(_addFriend);
 
 var _friendListContainer = require('../containers/friendListContainer');
 
 var _friendListContainer2 = _interopRequireDefault(_friendListContainer);
 
-var _homeButtonContainer = require('../containers/homeButtonContainer');
+var _home = require('./buttons/home');
 
-var _homeButtonContainer2 = _interopRequireDefault(_homeButtonContainer);
+var _home2 = _interopRequireDefault(_home);
+
+var _loginContainer = require('../containers/loginContainer');
+
+var _loginContainer2 = _interopRequireDefault(_loginContainer);
+
+var _logOut = require('./buttons/logOut');
+
+var _logOut2 = _interopRequireDefault(_logOut);
 
 var _otherPeopleContainer = require('../containers/otherPeopleContainer');
 
 var _otherPeopleContainer2 = _interopRequireDefault(_otherPeopleContainer);
 
-var _pageNameContainer = require('../containers/pageNameContainer');
+var _pageName = require('./navbar/pageName');
 
-var _pageNameContainer2 = _interopRequireDefault(_pageNameContainer);
+var _pageName2 = _interopRequireDefault(_pageName);
 
 var _postToWallContainer = require('../containers/postToWallContainer');
 
 var _postToWallContainer2 = _interopRequireDefault(_postToWallContainer);
+
+var _searchBar = require('./navbar/searchBar');
+
+var _searchBar2 = _interopRequireDefault(_searchBar);
 
 var _wallContainer = require('../containers/wallContainer');
 
@@ -27098,22 +27128,36 @@ var Layout = function (_Component) {
 
 			return _react2.default.createElement(
 				'div',
-				null,
-				!isUserPage ? _react2.default.createElement(_homeButtonContainer2.default, null) : null,
-				_react2.default.createElement(_pageNameContainer2.default, null),
-				!isFriend ? _react2.default.createElement(_addFriendButtonContainer2.default, null) : null,
-				isFriend ? _react2.default.createElement(_friendListContainer2.default, null) : _react2.default.createElement(
-					'h4',
-					null,
-					'You must add this person to see their friend list'
+				{ className: 'page' },
+				_react2.default.createElement(
+					'div',
+					{ className: 'navbar' },
+					_react2.default.createElement(_logOut2.default, null),
+					_react2.default.createElement(_searchBar2.default, null),
+					!isUserPage ? _react2.default.createElement(_home2.default, null) : null,
+					!isUserPage ? _react2.default.createElement(_pageName2.default, null) : _react2.default.createElement(
+						'h2',
+						null,
+						'HOME'
+					)
 				),
-				isFriend ? _react2.default.createElement(_wallContainer2.default, null) : _react2.default.createElement(
-					'h4',
-					null,
-					'You must add this person to see their wall'
-				),
-				isFriend ? _react2.default.createElement(_postToWallContainer2.default, null) : null,
-				isUserPage ? _react2.default.createElement(_otherPeopleContainer2.default, null) : null
+				_react2.default.createElement(
+					'div',
+					{ className: 'body' },
+					!isFriend ? _react2.default.createElement(_addFriend2.default, null) : null,
+					isFriend ? _react2.default.createElement(_friendListContainer2.default, null) : _react2.default.createElement(
+						'h4',
+						null,
+						'You must add this person to see their friend list'
+					),
+					isFriend ? _react2.default.createElement(_wallContainer2.default, null) : _react2.default.createElement(
+						'h4',
+						null,
+						'You must add this person to see their wall'
+					),
+					isFriend ? _react2.default.createElement(_postToWallContainer2.default, null) : null,
+					isUserPage ? _react2.default.createElement(_otherPeopleContainer2.default, null) : null
+				)
 			);
 		}
 	}]);
@@ -27128,7 +27172,7 @@ Layout.propTypes = {
 
 exports.default = Layout;
 
-},{"../containers/addFriendButtonContainer":278,"../containers/friendListContainer":279,"../containers/homeButtonContainer":280,"../containers/otherPeopleContainer":281,"../containers/pageNameContainer":282,"../containers/postToWallContainer":283,"../containers/wallContainer":284,"react":248,"react-router":94}],263:[function(require,module,exports){
+},{"../containers/friendListContainer":281,"../containers/loginContainer":282,"../containers/otherPeopleContainer":283,"../containers/postToWallContainer":284,"../containers/wallContainer":285,"./buttons/addFriend":263,"./buttons/home":264,"./buttons/logOut":265,"./navbar/pageName":270,"./navbar/searchBar":271,"react":248,"react-router":94}],263:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27138,6 +27182,10 @@ Object.defineProperty(exports, "__esModule", {
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
+var _index = require('../../actions/index');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27154,15 +27202,37 @@ var AddFriendButton = function AddFriendButton(_ref) {
 	);
 };
 
+// Actions
+
+
+var mapStateToProps = function mapStateToProps(state) {
+	var id = state.id;
+	var userId = state.userId;
+
+
+	return {
+		id: id,
+		userId: userId
+	};
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	return {
+		addFriend: function addFriend(profileId, id) {
+			dispatch((0, _index.addFriend)(profileId, id));
+		}
+	};
+};
+
 AddFriendButton.propTypes = {
 	id: _react.PropTypes.number.isRequired,
 	userId: _react.PropTypes.number.isRequired,
 	addFriend: _react.PropTypes.func.isRequired
 };
 
-exports.default = AddFriendButton;
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(AddFriendButton);
 
-},{"react":248}],264:[function(require,module,exports){
+},{"../../actions/index":261,"react":248,"react-redux":60}],264:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27177,6 +27247,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require('react-router');
 
+var _reactRedux = require('react-redux');
+
+var _index = require('../../actions/index');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27184,6 +27258,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Actions
+
 
 var HomeButton = function (_Component) {
 	_inherits(HomeButton, _Component);
@@ -27226,14 +27303,203 @@ var HomeButton = function (_Component) {
 	return HomeButton;
 }(_react.Component);
 
+var mapStateToProps = function mapStateToProps(state) {
+	var userId = state.userId;
+
+
+	return {
+		userId: userId
+	};
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	return {
+		fetchData: function fetchData(id) {
+			return dispatch((0, _index.fetchData)(id));
+		}
+	};
+};
+
 HomeButton.propTypes = {
 	userId: _react.PropTypes.number.isRequired,
 	fetchData: _react.PropTypes.func.isRequired
 };
 
-exports.default = HomeButton;
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(HomeButton);
 
-},{"react":248,"react-router":94}],265:[function(require,module,exports){
+},{"../../actions/index":261,"react":248,"react-redux":60,"react-router":94}],265:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
+
+var _reactRedux = require('react-redux');
+
+var _index = require('../../actions/index');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Actions
+
+
+var LogOutButton = function (_Component) {
+	_inherits(LogOutButton, _Component);
+
+	function LogOutButton(props) {
+		_classCallCheck(this, LogOutButton);
+
+		// setUser()
+
+		// Functions
+
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LogOutButton).call(this, props));
+
+		_this.logOut = _this.logOut.bind(_this);
+		return _this;
+	}
+
+	_createClass(LogOutButton, [{
+		key: 'logOut',
+		value: function logOut() {
+			_reactRouter.browserHistory.push('/');
+			(0, _index.setUser)(-1, null);
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			return _react2.default.createElement(
+				'button',
+				{ type: 'button', onClick: this.logOut },
+				'LOG OUT'
+			);
+		}
+	}]);
+
+	return LogOutButton;
+}(_react.Component);
+
+var mapStateToProps = function mapStateToProps(state) {
+	return {};
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	return {
+		setUser: function setUser(id, name) {
+			return dispatch((0, _index.setUser)(id, name));
+		}
+	};
+};
+
+LogOutButton.propTypes = {
+	setUser: _react.PropTypes.func.isRequired
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LogOutButton);
+
+},{"../../actions/index":261,"react":248,"react-redux":60,"react-router":94}],266:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var InputForm = function (_Component) {
+	_inherits(InputForm, _Component);
+
+	function InputForm(props) {
+		_classCallCheck(this, InputForm);
+
+		// submit()
+
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(InputForm).call(this, props));
+
+		_this.state = { value: '' };
+
+		// Functions
+		_this.handleTextChange = _this.handleTextChange.bind(_this);
+		_this.handleSubmit = _this.handleSubmit.bind(_this);
+		return _this;
+	}
+
+	_createClass(InputForm, [{
+		key: 'handleSubmit',
+		value: function handleSubmit(e) {
+			var submit = this.props.submit;
+			var value = this.state.value;
+
+
+			submit(value);
+			this.setState({ value: '' });
+		}
+	}, {
+		key: 'handleTextChange',
+		value: function handleTextChange(e) {
+			this.setState({ value: e.target.value });
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var value = this.state.value;
+			var _props = this.props;
+			var text = _props.text;
+			var placeHolder = _props.placeHolder;
+
+
+			return _react2.default.createElement(
+				'form',
+				null,
+				_react2.default.createElement('input', { type: 'text', name: 'text', placeholder: placeHolder,
+					value: value, onChange: this.handleTextChange }),
+				_react2.default.createElement(
+					'button',
+					{ type: 'button', onClick: this.handleSubmit },
+					text
+				)
+			);
+		}
+	}]);
+
+	return InputForm;
+}(_react.Component);
+
+InputForm.propTypes = {
+	submit: _react.PropTypes.func.isRequired,
+	placeHolder: _react.PropTypes.string.isRequired,
+	text: _react.PropTypes.string.isRequired
+};
+
+exports.default = InputForm;
+
+},{"react":248}],267:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27257,9 +27523,6 @@ var Friend = function Friend(_ref) {
 	return _react2.default.createElement(
 		'li',
 		null,
-		'ID: ',
-		id,
-		' NAME: ',
 		name,
 		_react2.default.createElement(
 			'button',
@@ -27284,7 +27547,7 @@ Friend.propTypes = {
 
 exports.default = Friend;
 
-},{"react":248,"react-router":94}],266:[function(require,module,exports){
+},{"react":248,"react-router":94}],268:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27340,12 +27603,15 @@ var FriendList = function (_Component) {
 			var _props = this.props;
 			var friends = _props.friends;
 			var isUserPage = _props.isUserPage;
+			var profileId = _props.profileId;
 
+			// friends includes themself for easier logic
 
-			if (friends === undefined) // friends is empty
-				return false;
+			var friendsWithoutSelf = friends.filter(function (friend) {
+				return friend.id != profileId;
+			});
 
-			return friends.map(function (friend) {
+			return friendsWithoutSelf.map(function (friend) {
 				return _react2.default.createElement(_friend2.default, { key: friend.id,
 					id: friend.id, name: friend.name, isUserPage: isUserPage,
 					viewProfile: function viewProfile() {
@@ -27381,7 +27647,7 @@ var FriendList = function (_Component) {
 				'div',
 				null,
 				_react2.default.createElement(
-					'h2',
+					'h3',
 					null,
 					'FriendList'
 				),
@@ -27403,7 +27669,126 @@ FriendList.propTypes = {
 
 exports.default = FriendList;
 
-},{"./friend":265,"react":248,"react-router":94}],267:[function(require,module,exports){
+},{"./friend":267,"react":248,"react-router":94}],269:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
+
+var _inputForm = require('./forms/inputForm');
+
+var _inputForm2 = _interopRequireDefault(_inputForm);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Components
+
+
+var Login = function (_Component) {
+	_inherits(Login, _Component);
+
+	function Login(props) {
+		_classCallCheck(this, Login);
+
+		// createAccount(), namesById, 
+		// nextFreeId, fetchData(), setUser()
+
+		// Function
+
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Login).call(this, props));
+
+		_this.createAccount = _this.createAccount.bind(_this);
+		_this.login = _this.login.bind(_this);
+		return _this;
+	}
+
+	_createClass(Login, [{
+		key: 'createAccount',
+		value: function createAccount(username) {
+			var _props = this.props;
+			var createAccount = _props.createAccount;
+			var namesById = _props.namesById;
+			var nextFreeId = _props.nextFreeId;
+			var setUser = _props.setUser;
+
+
+			if (namesById.filter(function (users) {
+				return username == users.name;
+			}).length != 0) {
+				alert('Username is already taken, try a different one');
+				return;
+			}
+
+			createAccount(nextFreeId, username);
+		}
+	}, {
+		key: 'login',
+		value: function login(username) {
+			var _props2 = this.props;
+			var namesById = _props2.namesById;
+			var fetchData = _props2.fetchData;
+			var setUser = _props2.setUser;
+
+
+			var user = namesById.filter(function (users) {
+				return username == users.name;
+			});
+
+			if (user.length != 1) {
+				// Name does not exist
+				alert('Account does not exist');
+				return;
+			}
+
+			setUser(user[0].id, user[0].name);
+			fetchData(user[0].id);
+			_reactRouter.browserHistory.push('/' + user[0].id);
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			return _react2.default.createElement(
+				'div',
+				null,
+				_react2.default.createElement(
+					'h2',
+					null,
+					'Login'
+				),
+				_react2.default.createElement(_inputForm2.default, { placeHolder: 'Type a username ...', text: 'Login',
+					submit: this.login }),
+				_react2.default.createElement(
+					'h2',
+					null,
+					'Create an Account'
+				),
+				_react2.default.createElement(_inputForm2.default, { placeHolder: 'Type a username here!', text: 'Create Account',
+					submit: this.createAccount })
+			);
+		}
+	}]);
+
+	return Login;
+}(_react.Component);
+
+exports.default = Login;
+
+},{"./forms/inputForm":266,"react":248,"react-router":94}],270:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27414,24 +27799,159 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRedux = require('react-redux');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var PageName = function PageName(_ref) {
 	var name = _ref.name;
 	return _react2.default.createElement(
-		'h1',
+		'h2',
 		null,
-		name
+		_react2.default.createElement(
+			'b',
+			null,
+			_react2.default.createElement(
+				'i',
+				null,
+				name,
+				'\'s Profile'
+			)
+		)
 	);
+};
+
+var mapStateToProps = function mapStateToProps(state) {
+	return {
+		name: state.name
+	};
 };
 
 PageName.propTypes = {
 	name: _react.PropTypes.string.isRequired
 };
 
-exports.default = PageName;
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(PageName);
 
-},{"react":248}],268:[function(require,module,exports){
+},{"react":248,"react-redux":60}],271:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
+var _reactRouter = require('react-router');
+
+var _inputForm = require('../forms/inputForm');
+
+var _inputForm2 = _interopRequireDefault(_inputForm);
+
+var _index = require('../../actions/index');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Components
+
+
+// Actions
+
+
+var SearchBar = function (_Component) {
+	_inherits(SearchBar, _Component);
+
+	function SearchBar(props) {
+		_classCallCheck(this, SearchBar);
+
+		// namesById, fetchData()
+
+		// Functions
+
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SearchBar).call(this, props));
+
+		_this.search = _this.search.bind(_this);
+		return _this;
+	}
+
+	_createClass(SearchBar, [{
+		key: 'search',
+		value: function search(profileName) {
+			var _props = this.props;
+			var fetchData = _props.fetchData;
+			var namesById = _props.namesById;
+
+
+			var profile = namesById.filter(function (users) {
+				return profileName == users.name;
+			});
+
+			if (profile.length != 1) {
+				// Name does not exist
+				console.log('Account does not exist');
+				return;
+			}
+
+			fetchData(profile[0].id);
+			_reactRouter.browserHistory.push('/' + profile[0].id);
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			return _react2.default.createElement(
+				'div',
+				null,
+				_react2.default.createElement(
+					'h4',
+					null,
+					'Search'
+				),
+				_react2.default.createElement(_inputForm2.default, { placeHolder: 'Type a profile here ...',
+					text: 'Search', submit: this.search })
+			);
+		}
+	}]);
+
+	return SearchBar;
+}(_react.Component);
+
+var mapStateToProps = function mapStateToProps(state) {
+	var namesById = state.namesById;
+
+
+	return {
+		namesById: namesById
+	};
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	return {
+		fetchData: function fetchData(id) {
+			return dispatch((0, _index.fetchData)(id));
+		}
+	};
+};
+
+SearchBar.PropTypes = {
+	fetchData: _react.PropTypes.func.isRequired,
+	namesById: _react.PropTypes.string.isRequired
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SearchBar);
+
+},{"../../actions/index":261,"../forms/inputForm":266,"react":248,"react-redux":60,"react-router":94}],272:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27525,7 +28045,7 @@ var OtherPeople = function (_Component) {
 				'div',
 				null,
 				_react2.default.createElement(
-					'h2',
+					'h3',
 					null,
 					'People You May Know'
 				),
@@ -27546,7 +28066,7 @@ OtherPeople.propTypes = {
 
 exports.default = OtherPeople;
 
-},{"./person":269,"react":248,"react-router":94}],269:[function(require,module,exports){
+},{"./person":273,"react":248,"react-router":94}],273:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27569,9 +28089,6 @@ var Person = function Person(_ref) {
 	return _react2.default.createElement(
 		'li',
 		null,
-		'ID: ',
-		id,
-		' NAME: ',
 		name,
 		_react2.default.createElement(
 			'button',
@@ -27595,90 +28112,7 @@ Person.propTypes = {
 
 exports.default = Person;
 
-},{"react":248,"react-router":94}],270:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var InputForm = function (_Component) {
-	_inherits(InputForm, _Component);
-
-	function InputForm(props) {
-		_classCallCheck(this, InputForm);
-
-		// submitPost()
-
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(InputForm).call(this, props));
-
-		_this.state = { value: '' };
-
-		// Functions
-		_this.handleTextChange = _this.handleTextChange.bind(_this);
-		_this.handleSubmit = _this.handleSubmit.bind(_this);
-		return _this;
-	}
-
-	_createClass(InputForm, [{
-		key: 'handleSubmit',
-		value: function handleSubmit(e) {
-			var submitPost = this.props.submitPost;
-			var value = this.state.value;
-
-
-			submitPost(value);
-			this.setState({ value: '' });
-		}
-	}, {
-		key: 'handleTextChange',
-		value: function handleTextChange(e) {
-			this.setState({ value: e.target.value });
-		}
-	}, {
-		key: 'render',
-		value: function render() {
-			var value = this.state.value;
-
-
-			return _react2.default.createElement(
-				'form',
-				null,
-				_react2.default.createElement('input', { type: 'text', name: 'text', placeholder: 'Write something here...',
-					value: value, onChange: this.handleTextChange }),
-				_react2.default.createElement(
-					'button',
-					{ type: 'button', onClick: this.handleSubmit },
-					'Post'
-				)
-			);
-		}
-	}]);
-
-	return InputForm;
-}(_react.Component);
-
-InputForm.propTypes = {
-	submitPost: _react.PropTypes.func.isRequired
-};
-
-exports.default = InputForm;
-
-},{"react":248}],271:[function(require,module,exports){
+},{"react":248,"react-router":94}],274:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27700,9 +28134,7 @@ var Post = function Post(_ref) {
 	return _react2.default.createElement(
 		'li',
 		null,
-		'ID: ',
-		id,
-		' AUTHOR: ',
+		'AUTHOR: ',
 		author,
 		' TEXT: ',
 		text,
@@ -27724,7 +28156,7 @@ Post.propTypes = {
 
 exports.default = Post;
 
-},{"react":248}],272:[function(require,module,exports){
+},{"react":248}],275:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27737,7 +28169,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _inputForm = require('./inputForm');
+var _inputForm = require('../forms/inputForm');
 
 var _inputForm2 = _interopRequireDefault(_inputForm);
 
@@ -27758,7 +28190,7 @@ var PostToWall = function (_Component) {
 	function PostToWall(props) {
 		_classCallCheck(this, PostToWall);
 
-		// nextFreeId, profileId, submitPost(), userName
+		// nextFreeId, profileId, submitPost(), username
 
 		// Functions
 
@@ -27772,18 +28204,19 @@ var PostToWall = function (_Component) {
 		key: 'post',
 		value: function post(text) {
 			var _props = this.props;
-			var userName = _props.userName;
+			var username = _props.username;
 			var nextFreeId = _props.nextFreeId;
 			var profileId = _props.profileId;
 			var submitPost = _props.submitPost;
 
 
-			submitPost(profileId, { id: nextFreeId, author: userName, text: text });
+			submitPost(profileId, { id: nextFreeId, author: username, text: text });
 		}
 	}, {
 		key: 'render',
 		value: function render() {
-			return _react2.default.createElement(_inputForm2.default, { submitPost: this.post });
+			return _react2.default.createElement(_inputForm2.default, { submit: this.post, text: 'Post',
+				placeHolder: 'Write something here ...' });
 		}
 	}]);
 
@@ -27794,12 +28227,12 @@ PostToWall.propTypes = {
 	nextFreeId: _react.PropTypes.number.isRequired,
 	profileId: _react.PropTypes.number.isRequired,
 	submitPost: _react.PropTypes.func.isRequired,
-	userName: _react.PropTypes.string.isRequired
+	username: _react.PropTypes.string.isRequired
 };
 
 exports.default = PostToWall;
 
-},{"./inputForm":270,"react":248}],273:[function(require,module,exports){
+},{"../forms/inputForm":266,"react":248}],276:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27882,7 +28315,7 @@ var Wall = function (_Component) {
 				'div',
 				null,
 				_react2.default.createElement(
-					'h2',
+					'h3',
 					null,
 					'Wall'
 				),
@@ -27903,7 +28336,7 @@ Wall.propTypes = {
 
 exports.default = Wall;
 
-},{"./post":271,"react":248}],274:[function(require,module,exports){
+},{"./post":274,"react":248}],277:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27924,7 +28357,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var initialState = {
 	userId: -1,
-	userName: '',
+	username: '',
 	namesById: [],
 	id: -1,
 	name: '',
@@ -27937,13 +28370,14 @@ var initialState = {
 
 exports.default = (0, _redux.createStore)(_index2.default, initialState, (0, _redux.applyMiddleware)(_reduxThunk2.default));
 
-},{"./reducers/index":287,"redux":255,"redux-thunk":249}],275:[function(require,module,exports){
+},{"./reducers/index":288,"redux":255,"redux-thunk":249}],278:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 // DATA RELATED
+var CREATE_ACCOUNT = exports.CREATE_ACCOUNT = 'CREATE_ACCOUNT';
 var FETCH_DATA = exports.FETCH_DATA = 'FETCH_DATA';
 var FETCH_NAMES = exports.FETCH_NAMES = 'FETCH_NAMES';
 var SET_USER = exports.SET_USER = 'SET_USER';
@@ -27955,7 +28389,7 @@ var REMOVE_POST = exports.REMOVE_POST = 'REMOVE_POST';
 var VIEW_PROFILE = exports.VIEW_PROFILE = 'VIEW_PROFILE';
 var SUBMIT_POST = exports.SUBMIT_POST = 'SUBMIT_POST';
 
-},{}],276:[function(require,module,exports){
+},{}],279:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27964,7 +28398,7 @@ Object.defineProperty(exports, "__esModule", {
 var FRIENDS = exports.FRIENDS = 'friends';
 var NONFRIENDS = exports.NONFRIENDS = 'nonFriends';
 
-},{}],277:[function(require,module,exports){
+},{}],280:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28018,53 +28452,7 @@ var App = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Layout2
 
 exports.default = App;
 
-},{"../actions/index":261,"../components/Layout":262,"../functions/index":285,"react-redux":60}],278:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _reactRedux = require('react-redux');
-
-var _addFriend2 = require('../components/buttons/addFriend');
-
-var _addFriend3 = _interopRequireDefault(_addFriend2);
-
-var _index = require('../actions/index');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Component to link to
-
-
-var mapStateToProps = function mapStateToProps(state) {
-	var id = state.id;
-	var userId = state.userId;
-
-
-	return {
-		id: id,
-		userId: userId
-	};
-};
-
-// Actions
-
-
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	return {
-		addFriend: function addFriend(profileId, id) {
-			dispatch((0, _index.addFriend)(profileId, id));
-		}
-	};
-};
-
-var addFriendButtonContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_addFriend3.default);
-
-exports.default = addFriendButtonContainer;
-
-},{"../actions/index":261,"../components/buttons/addFriend":263,"react-redux":60}],279:[function(require,module,exports){
+},{"../actions/index":261,"../components/Layout":262,"../functions/index":286,"react-redux":60}],281:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28126,7 +28514,7 @@ var friendListContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchT
 
 exports.default = friendListContainer;
 
-},{"../actions/index":261,"../components/friends/friendList":266,"../constants/constants":276,"../functions/index":285,"react-redux":60}],280:[function(require,module,exports){
+},{"../actions/index":261,"../components/friends/friendList":268,"../constants/constants":279,"../functions/index":286,"react-redux":60}],282:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28135,9 +28523,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _reactRedux = require('react-redux');
 
-var _home = require('../components/buttons/home');
+var _login = require('../components/login');
 
-var _home2 = _interopRequireDefault(_home);
+var _login2 = _interopRequireDefault(_login);
 
 var _index = require('../actions/index');
 
@@ -28147,11 +28535,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
 var mapStateToProps = function mapStateToProps(state) {
-	var userId = state.userId;
+	var namesById = state.namesById;
 
 
 	return {
-		userId: userId
+		namesById: namesById,
+		nextFreeId: namesById.length
 	};
 };
 
@@ -28160,17 +28549,25 @@ var mapStateToProps = function mapStateToProps(state) {
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	return {
+		createAccount: function createAccount(id, username) {
+			return dispatch((0, _index.createAccount)(id, username));
+		},
+
 		fetchData: function fetchData(id) {
 			return dispatch((0, _index.fetchData)(id));
+		},
+
+		setUser: function setUser(id, name) {
+			return dispatch((0, _index.setUser)(id, name));
 		}
 	};
 };
 
-var HomeButtonContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_home2.default);
+var LoginContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_login2.default);
 
-exports.default = HomeButtonContainer;
+exports.default = LoginContainer;
 
-},{"../actions/index":261,"../components/buttons/home":264,"react-redux":60}],281:[function(require,module,exports){
+},{"../actions/index":261,"../components/login":269,"react-redux":60}],283:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28230,35 +28627,7 @@ var otherPeopleContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatch
 
 exports.default = otherPeopleContainer;
 
-},{"../actions/index":261,"../components/people/otherPeople":268,"../constants/constants":276,"../functions/index":285,"react-redux":60}],282:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _reactRedux = require('react-redux');
-
-var _pageName = require('../components/pageName');
-
-var _pageName2 = _interopRequireDefault(_pageName);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var mapStateToProps = function mapStateToProps(state) {
-	return {
-		name: state.name
-	};
-};
-
-// Component to connect to
-
-
-var PageNameContainer = (0, _reactRedux.connect)(mapStateToProps)(_pageName2.default);
-
-exports.default = PageNameContainer;
-
-},{"../components/pageName":267,"react-redux":60}],283:[function(require,module,exports){
+},{"../actions/index":261,"../components/people/otherPeople":272,"../constants/constants":279,"../functions/index":286,"react-redux":60}],284:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28281,13 +28650,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var mapStateToProps = function mapStateToProps(state) {
 	var id = state.id;
 	var wall = state.wall;
-	var userName = state.userName;
+	var username = state.username;
 
 
 	return {
 		nextFreeId: wall.length,
 		profileId: id,
-		userName: userName
+		username: username
 	};
 };
 
@@ -28306,7 +28675,7 @@ var PostToWallContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchT
 
 exports.default = PostToWallContainer;
 
-},{"../actions/index":261,"../components/wall/postToWall":272,"react-redux":60}],284:[function(require,module,exports){
+},{"../actions/index":261,"../components/wall/postToWall":275,"react-redux":60}],285:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28357,7 +28726,7 @@ var WallContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps
 
 exports.default = WallContainer;
 
-},{"../actions/index":261,"../components/wall/wall":273,"../functions/index":285,"react-redux":60}],285:[function(require,module,exports){
+},{"../actions/index":261,"../components/wall/wall":276,"../functions/index":286,"react-redux":60}],286:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28392,7 +28761,7 @@ var splitPeople = exports.splitPeople = function splitPeople(state, type) {
         return namesById;
 };
 
-},{"../constants/constants":276}],286:[function(require,module,exports){
+},{"../constants/constants":279}],287:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -28411,6 +28780,10 @@ var _configureStore2 = _interopRequireDefault(_configureStore);
 
 var _reactRouter = require('react-router');
 
+var _loginContainer = require('./containers/loginContainer');
+
+var _loginContainer2 = _interopRequireDefault(_loginContainer);
+
 var _App = require('./containers/App');
 
 var _App2 = _interopRequireDefault(_App);
@@ -28419,18 +28792,16 @@ var _index = require('./actions/index');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Routes
-
-
 var store = _configureStore2.default;
 
 // Load initial data
 
 
 // Actions
+
+
+// Routes
 var initialLoad = function initialLoad() {
-	store.dispatch((0, _index.setUser)(0, 'JJ'));
-	store.dispatch((0, _index.fetchData)(0));
 	store.dispatch((0, _index.fetchNames)());
 };
 
@@ -28440,12 +28811,12 @@ _reactDom2.default.render(_react2.default.createElement(
 	_react2.default.createElement(
 		_reactRouter.Router,
 		{ history: _reactRouter.browserHistory },
-		_react2.default.createElement(_reactRouter.Route, { path: '/', component: _App2.default, onEnter: initialLoad }),
+		_react2.default.createElement(_reactRouter.Route, { path: '/', component: _loginContainer2.default, onEnter: initialLoad }),
 		_react2.default.createElement(_reactRouter.Route, { path: '/:id', component: _App2.default })
 	)
 ), document.getElementById('root'));
 
-},{"./actions/index":261,"./configureStore":274,"./containers/App":277,"react":248,"react-dom":57,"react-redux":60,"react-router":94}],287:[function(require,module,exports){
+},{"./actions/index":261,"./configureStore":277,"./containers/App":280,"./containers/loginContainer":282,"react":248,"react-dom":57,"react-redux":60,"react-router":94}],288:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28524,13 +28895,13 @@ var userIdReducer = function userIdReducer() {
 	}
 };
 
-var userNameReducer = function userNameReducer() {
+var usernameReducer = function usernameReducer() {
 	var state = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
 	var action = arguments[1];
 
 	switch (action.type) {
 		case _ActionTypes.SET_USER:
-			return action.userName;
+			return action.username;
 
 		default:
 			return state;
@@ -28552,7 +28923,7 @@ var wallReducer = function wallReducer() {
 
 var reducer = (0, _redux.combineReducers)({
 	userId: userIdReducer,
-	userName: userNameReducer,
+	username: usernameReducer,
 	id: idReducer,
 	name: nameReducer,
 	namesById: namesByIdReducer,
@@ -28562,4 +28933,4 @@ var reducer = (0, _redux.combineReducers)({
 
 exports.default = reducer;
 
-},{"../constants/ActionTypes":275,"redux":255}]},{},[286]);
+},{"../constants/ActionTypes":278,"redux":255}]},{},[287]);

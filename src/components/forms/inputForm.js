@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 
 class InputForm extends Component {
 	constructor(props) {
-		super(props); // submitPost()
+		super(props); // submit()
 		this.state = { value: '' }
 
 		// Functions
@@ -11,10 +11,10 @@ class InputForm extends Component {
 	}
 
 	handleSubmit(e) {
-		const { submitPost } = this.props;
+		const { submit } = this.props;
 		const { value } = this.state;
 		
-		submitPost(value);
+		submit(value);
 		this.setState({ value: '' });
 	}
 
@@ -24,19 +24,22 @@ class InputForm extends Component {
 
 	render() {
 		const { value } = this.state;
+		const { text, placeHolder } = this.props;
 
 		return (
 			<form>
-				<input type="text" name="text" placeholder="Write something here..." 
+				<input type="text" name="text" placeholder={placeHolder}
 					value={value} onChange={this.handleTextChange} />
-				<button type="button" onClick={this.handleSubmit}>Post</button>
+				<button type="button" onClick={this.handleSubmit}>{text}</button>
 			</form>
 		)
 	}
 }
 
 InputForm.propTypes = {
-	submitPost: PropTypes.func.isRequired
+	submit: PropTypes.func.isRequired,
+	placeHolder: PropTypes.string.isRequired,
+	text: PropTypes.string.isRequired
 }
 
 export default InputForm

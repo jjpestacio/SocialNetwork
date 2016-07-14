@@ -7,12 +7,12 @@ import PostToWall from '../components/wall/postToWall'
 import { submitPost, removePost } from '../actions/index'
 
 const mapStateToProps = ( state ) => {
-	const { id, wall, userName } = state;
+	const { id, wall, username } = state;
 
 	return {
 		nextFreeId: wall.length,
 		profileId: id,
-		userName
+		username
 	}
 }
 

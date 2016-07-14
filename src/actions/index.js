@@ -1,6 +1,11 @@
 import axios from 'axios'
+import { browserHistory } from 'react-router'
 
-import { FETCH_DATA, FETCH_NAMES, SET_USER, ADD_FRIEND, REMOVE_FRIEND, REMOVE_POST, SUBMIT_POST, VIEW_PROFILE } from '../constants/ActionTypes'
+import { 
+	ADD_FRIEND, CREATE_ACCOUNT, FETCH_DATA, 
+	FETCH_NAMES, REMOVE_FRIEND, REMOVE_POST, 
+	SET_USER, SUBMIT_POST, VIEW_PROFILE } 
+from '../constants/ActionTypes'
 
 export const addFriend = ( profileId, idToAdd ) => ( dispatch ) => {
 	axios.post('/api/users/' + profileId, {
@@ -10,6 +15,20 @@ export const addFriend = ( profileId, idToAdd ) => ( dispatch ) => {
 		.then(response => {
 			dispatch(fetchData(profileId))
 		})
+}
+
+export const createAccount = ( userId, username ) => ( dispatch ) => {
+	axios.post('/api/users/' + userId, {
+		type: CREATE_ACCOUNT,
+		id: userId,
+		name: username
+	})
+
+	// Go to newly created account's homepage
+	dispatch(setUser(userId, username));
+	dispatch(fetchNames());
+	dispatch(fetchData(userId));
+	browserHistory.push('/' + userId);
 }
 
 export const fetchData = ( profileId ) => ( dispatch ) => {
@@ -56,7 +75,7 @@ export const setUser = ( id, name ) => {
 	return {
 		type: SET_USER,
 		userId: id,
-		userName: name
+		username: name
 	}
 }
 

@@ -44,3 +44,11 @@ I learned the basics of the MERN stack and transferred my project to the stack. 
 I have not implemented server side routing yet, so you can only access the application from localhost:3000/ .. I intend to do server side routing next. I also hope to create a simple log in system (not with authentication) so that the client can use different accounts that are registered with the system or create a new account. Later I hope to create interactivity between two users, such as instant messaging, using sockets.
 
 I promise I'll style it one day :D!
+
+# 07/14/2016
+
+I realized that transferring this project to include server side rendering isomporphically/universally would be too difficult for me right now. I would have to load some data initially on the server, but my actions are not currently suited to do so. My goal for this project was to practice React and I believe I learned a lot from it, so I am going to end the project here. I created a login page with an option for the user to create an account. I also added log out features. 
+
+Since I now understand the basic of the MERN stack and how universal server side rendering is done, I will be able to lay a better foundation for my next project. 
+
+For my next project, I want to learn how to use sockets to make my application be real time. I might learn AngularJS and create an application based on the MEAN stack. I also want to render and route server side.

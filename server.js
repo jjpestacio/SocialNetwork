@@ -7,7 +7,10 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 
 // Constants
-import { ADD_FRIEND, REMOVE_FRIEND, REMOVE_POST, SUBMIT_POST } from './src/constants/ActionTypes'
+import { 
+	ADD_FRIEND, CREATE_ACCOUNT, REMOVE_FRIEND, 
+	REMOVE_POST, SUBMIT_POST } 
+from './src/constants/ActionTypes'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,7 +19,6 @@ var db;
 // Middleware
 app.use(express.static('static'));
 app.use(bodyParser.json());
-//app.use(handleRender);
 
 // Get specific profile info
 app.get('/api/users/:id', ( req, res ) => {
@@ -47,7 +49,24 @@ app.post('/api/users/:id', ( req, res ) => {
 					{ $push: { friends: profileId }}
 				)
 
-			break;
+			break
+		}
+
+		case CREATE_ACCOUNT: {
+			const { name } = req.body;
+
+			db.collection("namesById")
+				.insert({ id: id, name: name })
+
+			db.collection("profiles")
+				.insert({
+					id: id,
+					name: name,
+					friends: [id],
+					wall: []
+				})
+
+			break
 		}
 
 		case REMOVE_FRIEND: {
@@ -63,7 +82,8 @@ app.post('/api/users/:id', ( req, res ) => {
 					{ id: id }, 
 					{ $pull: { friends: profileId }}
 				)
-			break;
+
+			break
 		}
 
 		case REMOVE_POST: {
@@ -72,7 +92,8 @@ app.post('/api/users/:id', ( req, res ) => {
 					{ id: profileId },
 					{ $pull: { wall: { id: id}}}
 				)
-			break;
+
+			break
 		}
 
 		case SUBMIT_POST: {
@@ -87,7 +108,8 @@ app.post('/api/users/:id', ( req, res ) => {
 						text
 					}}}
 				)
-			break;
+
+			break
 		}
 	}
 

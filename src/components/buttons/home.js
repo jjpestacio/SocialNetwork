@@ -1,5 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import { browserHistory } from 'react-router'
+import { connect } from 'react-redux'
+
+// Actions
+import { fetchData } from '../../actions/index'
 
 class HomeButton extends Component {
 	constructor(props) {
@@ -23,9 +27,27 @@ class HomeButton extends Component {
 	}
 }
 
+const mapStateToProps = ( state ) => {
+	const { userId } = state;
+
+	return {
+		userId
+	}
+}
+
+const mapDispatchToProps = ( dispatch ) => {
+	return {
+		fetchData: (id) => 
+			dispatch(fetchData(id))
+	}
+}
+
 HomeButton.propTypes = {
 	userId: PropTypes.number.isRequired,
 	fetchData: PropTypes.func.isRequired
 }
 
-export default HomeButton
+export default connect(
+	mapStateToProps,
+    mapDispatchToProps
+)(HomeButton)

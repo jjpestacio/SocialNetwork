@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 
 const Person = ({ id, name, addFriend, viewProfile }) => (
 	<li>
-		ID: {id} NAME: {name}
+		{name}
 		<button onClick={viewProfile}>View Profile</button>
 		<button onClick={addFriend}>Add Friend</button>
 	</li>		

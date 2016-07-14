@@ -3,8 +3,8 @@ import { Link } from 'react-router'
 
 const Friend = ({ id, name, isUserPage, removeFriend, viewProfile }) => (
 	<li>
-		ID: {id} NAME: {name}
-		
+		{name}
+	
 		<button onClick={viewProfile}>View Profile</button>
 
 		{ isUserPage ? 

@@ -6,7 +6,7 @@ import thunk from 'redux-thunk'
 
 const initialState = {
 	userId: -1,
-	userName: '',
+	username: '',
 	namesById: [],
 	id: -1,
 	name: '',

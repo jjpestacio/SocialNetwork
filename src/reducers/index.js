@@ -45,7 +45,7 @@ const namesByIdReducer = (state=[], action) => {
 
 const userIdReducer = ( state=null, action ) => {
 	switch(action.type) {
-		case SET_USER: 
+		case SET_USER:
 			return action.userId
 
 		default:
@@ -53,10 +53,10 @@ const userIdReducer = ( state=null, action ) => {
 	}
 }
 
-const userNameReducer = ( state=null, action ) => {
+const usernameReducer = ( state=null, action ) => {
 	switch(action.type) {
 		case SET_USER: 
-			return action.userName
+			return action.username
 
 		default:
 			return state
@@ -75,7 +75,7 @@ const wallReducer = ( state=[], action ) => {
 
 const reducer = combineReducers({
 	userId: userIdReducer,
-	userName: userNameReducer,
+	username: usernameReducer,
 	id: idReducer,
 	name: nameReducer,
 	namesById: namesByIdReducer,

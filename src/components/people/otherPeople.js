@@ -45,7 +45,7 @@ class OtherPeople extends Component {
 	render() {
 		return (
 			<div>	
-				<h2>People You May Know</h2>
+				<h3>People You May Know</h3>
 				{this.grabOtherPeople()}
 			</div>
 		)
